@@ -21,8 +21,13 @@
              $sp.state("login", {
 
                "url"     : "/login",
-               "template": "<login></login>"
-             }).state("dashboard", {
+               "template": "<login></login>",
+               "authRequired": true
+             }).state("signin", {
+
+               "url"     : "/signup",
+               "template": "<signin></signin>"
+             }).state("chat", {
 
                "url"     : "/",
                "template": "<chat></chat>",
@@ -32,7 +37,7 @@
                 * login check will be done before loadin the page
                 * if not authenticated, he will be redirected to LOGIN_PAGE
                */
-               "authRequired": false
+               "authRequired": true
              });
 
              $urp.otherwise("/");
@@ -64,13 +69,20 @@
                 ;(function (thisNext) {
 
                   Auth.status().then(function (resp) {
+                    if(next.name == "login") {
+
+                      if(resp.userId) {
+                        $state.go(LOGIN_REDIRECT_STATE, {"location": "replace"});
+                        return;
+                      }
+                    }
 
                     if (thisNext.name !== next.name) {
 
                       return;
                     }
 
-                    if (!resp.user) {
+                    if (!resp.userId && next.name != "login") {
 
                       $rootScope.$broadcast(AUTH_EVENTS.unAuthorized);
                       return;

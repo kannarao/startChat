@@ -22,17 +22,17 @@
 
               this.onSubmit = function (credentials) {
 
-                this.loadingText = "Verifying...";
-                this.viewSubmit = "disabled";
 
-                Auth.login(credentials).then(function () {
+                Auth.login(credentials).then(function (data) {
 
-                  $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+                  if(data.message == "success") {
+                    $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+                  } else {
+                    console.log(data);
+                  }
                 }, function () {
 
-                  that.loadingText = "Submit";
                   that.errorMsg = "Invalid Credentials";
-                  that.viewSubmit = "";
                 });
               };
             }]

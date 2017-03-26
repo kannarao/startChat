@@ -1,29 +1,30 @@
 <div id="hangout">
   <!-- header -->
-  <div id="head" class="style-bg"> 
+  <div id="head" class="style-bg">
     <i class="mdi mdi-arrow-left"></i>
     <i class="mdi mdi-fullscreen-exit"></i>
-    <i class="mdi mdi-menu"></i> 
-    <h1>John Doe</h1>
-    <i class="mdi mdi-chevron-down"></i>
+    <i class="mdi mdi-menu"></i>
+    <h1>{{$ctrl.user.userName}}</h1>
+    <i class="mdi mdi-chevron-down" style="padding-right: 40px;"></i>
+    <i class="mdi mdi-power" style="position: absolute;right: 0px;font-size: 22px;width: 40px;cursor:pointer" ng-click="$ctrl.logout();"></i>
   </div>
 
-  <!-- body --> 
+  <!-- body -->
   <div id="content">
     <!-- user details -->
     <div class="overlay"></div>
     <div class="card menu">
       <div class="header">
         <img src="http://s8.postimg.org/76bg2es2t/index.png" />
-        <h3></h3>
+        <h3>{{$ctrl.user.userName}}</h3>
       </div>
-      <div class="content"> 
+      <div class="content">
         <div class="i-group">
           <input type="text" id="username"><span class="bar"></span>
           <label>Name</label>
         </div>
         <br />
-        <div class="center"><canvas id="colorpick" width="250" height="220" ></canvas></div>                        
+        <div class="center"><canvas id="colorpick" width="250" height="220" ></canvas></div>
       </div>
     </div>
     <!-- end user details -->
@@ -31,18 +32,8 @@
     <!-- contancts -->
     <div class="list-account">
       <div class="meta-bar"><input class="nostyle search-filter" type="text" placeholder="Search" /></div>
-      <ul class="list mat-ripple">      
-        <li><img src="http://lorempixel.com/100/100/people/1/"><span class="name">Angie</span><i class="mdi mdi-menu-down"></i> </li>
-        <li><img src="http://lorempixel.com/100/100/people/6/"><span class="name">Larissa</span><i class="mdi mdi-menu-down"></i></li>
-        <li><img src="http://lorempixel.com/100/100/people"><span class="name">Hank</span><i class="mdi mdi-menu-down"></i></li>    
-        <li><img src="http://lorempixel.com/100/100/people/"><span class="name">Peter</span><i class="mdi mdi-menu-down"></i></li> 
-        <li><img src="http://lorempixel.com/100/100/people/"><span class="name">Oliver</span><i class="mdi mdi-menu-down"></i></li> 
-        <li><img src="http://lorempixel.com/100/100/people/"><span class="name">Chris</span><i class="mdi mdi-menu-down"></i></li> 
-        <li><img src="http://lorempixel.com/100/100/people/"><span class="name">Vanessa</span><i class="mdi mdi-menu-down"></i></li> 
-        <li><img src="http://lorempixel.com/100/100/people/"><span class="name">Leo</span><i class="mdi mdi-menu-down"></i></li> 
-        <li><img src="http://lorempixel.com/100/100/people/"><span class="name">Ash</span><i class="mdi mdi-menu-down"></i></li> 
-        <li><img src="http://lorempixel.com/100/100/people/"><span class="name">Doozer</span><i class="mdi mdi-menu-down"></i></li> 
-        <li><img src="http://lorempixel.com/100/100/people/"><span class="name">Munk</span><i class="mdi mdi-menu-down"></i></li> 
+      <ul class="list mat-ripple">
+        <li ng-repeat="user in users"><img src="http://lorempixel.com/100/100/people/1/"><span class="name">{{user.Username}}</span><i class="mdi mdi-menu-down"></i> </li>
       </ul> 
     </div>
     <!-- end contancts -->

@@ -3,23 +3,31 @@
 
   var endPoint = "/auth";
 
-  angular.module("auth", []).service("Auth", ["$q", "$http", "Session",
+  angular.module("auth", []).service("Auth", ["$q", "$http", "Session", "$timeout",
 
-    function ($q, $http, Session) {
+    function ($q, $http, Session, $timeout) {
 
       var deferredStatus = null;
 
       this.login = function (credentials) {
 
-        deferredStatus = null;
+        var deferredStatus = $q.defer();;
 
-        return $http.post(endPoint + "/login/", credentials)
-                    .then(function (resp) {
+        firebase.auth().signInWithEmailAndPassword(credentials.username, credentials.password).then(function(firebaseUser) {
 
-          resp = resp.data;
+          deferredStatus.resolve({message: "success"});
+        }).catch(function(error) {
 
-          Session.set(resp.result);
+          deferredStatus.resolve({code: error.code, message: error.message});
         });
+        //return $http.post(endPoint + "/login/", credentials)
+        //            .then(function (resp) {
+
+        //  resp = resp.data;
+
+        //  Session.set(resp.result);
+        //});
+        return deferredStatus.promise;
       };
 
       this.isAuthorized = function () {
@@ -31,34 +39,42 @@
 
       this.logout = function () {
 
-        return $http.get(endPoint + "/logout/").then(function () {
-
+        return firebase.auth().signOut().then(function() {
           Session.unset();
           deferredStatus = null;
+        }).catch(function(error) {
+          // An error happened.
         });
       };
 
       this.status = function () {
 
-        if (deferredStatus) {
+        //if (deferredStatus) {
 
-          return deferredStatus.promise;
-        }
+        //  return deferredStatus.promise;
+        //}
 
         deferredStatus = $q.defer();
 
-        $http.get(endPoint + "/status/").then(function (resp) {
+        var user = firebase.auth().currentUser;
+        if(user) {
+          var data = {userId: user.uid, userName: user.email, email: user.email}
+          Session.set(data);
+          deferredStatus.resolve(data);
+        } else {
+          $timeout(function() {
+          var user = firebase.auth().currentUser;
+          if (user) {
 
-          resp = resp.data;
+            var data = {userId: user.uid, userName: user.email, email: user.email}
+            Session.set(data);
+            deferredStatus.resolve(data);
+          } else {
 
-          if (resp.result && resp.result.user) {
-
-            Session.set(resp.result.user);
+            deferredStatus.resolve("fail");
           }
-
-          deferredStatus.resolve(resp.result);
-        });
-
+          }, 2000)
+        }
         return deferredStatus.promise;
       };
   }]);

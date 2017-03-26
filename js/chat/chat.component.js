@@ -5,12 +5,55 @@
          .component("chat", {
 
            "templateUrl" : "js/chat/chat.html",
-           "controller"  : ["$rootScope", "Auth", "AUTH_EVENTS",
+           "controller"  : ["$rootScope", "Auth", "AUTH_EVENTS", "Session", "$scope",
 
-             function ($rootScope, Auth, AUTH_EVENTS) {
+             function ($rootScope, Auth, AUTH_EVENTS, Session, $scope) {
 
               var that = this;
 
+              this.logout = function () {
+
+                 Auth.logout().then(function () {
+
+                   $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
+                 });
+              };
+
+              this.user = Session;
+
+              this.updateUser = function() {
+                user.updateProfile({
+                  displayName: "Jane Q. User",
+                  photoURL: "https://example.com/jane-q-user/profile.jpg"
+                }).then(function() {
+                  // Update successful.
+                }, function(error) {
+                  // An error happened.
+                });
+              }
+
+              $scope.users = [];
+              that.changeUsersData = function(data) {
+
+                $scope.users = [];
+                angular.forEach(data, function(user, id){
+                  $scope.users.push(user[id]);
+                })
+              }
+              var usersRef = firebase.database().ref("users/");
+              usersRef.on("value", function(snapshot) {
+                console.log(snapshot.val ());
+                $scope.$apply(function(){
+                  var data = snapshot.val ();
+                  that.changeUsersData(data);
+                });
+              }, function (error) {
+                console.log("Error: " + error.code);
+              });
+              usersRef.on("child_added", function(data, prevChildKey) {
+
+                var newPlayer = data.val();
+              })
 
     // First route to show
     var GLOBALSTATE = {
@@ -65,7 +108,7 @@
     });
 
     // Set Name
-    setName(localStorage.getItem('username'));
+    //setName(localStorage.getItem('username'));
 
     // Dyncolor ftw
     if (localStorage.getItem('color') !== null) {
@@ -78,13 +121,13 @@
     }
 
     // Helpers
-    function setName(name) {
-        $.trim(name) === '' || $.trim(name) === null ? name = 'John Doe' : name = name;
-        $('h1').text(name);
-        localStorage.setItem('username', name);
-        $('#username').val(name).addClass('used');
-        $('.card.menu > .header > h3').text(name);
-    }
+    //function setName(name) {
+    //    $.trim(name) === '' || $.trim(name) === null ? name = 'John Doe' : name = name;
+    //    $('h1').text(name);
+    //    localStorage.setItem('username', name);
+    //    $('#username').val(name).addClass('used');
+    //    $('.card.menu > .header > h3').text(name);
+    //}
 
     // Stylechanger
     function stylechange(arr) {

@@ -5,10 +5,22 @@
     <title>Chat Secretly</title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
+  <script src="https://www.gstatic.com/firebasejs/3.7.1/firebase.js"></script>
+  <script>
+    var config = {
+      apiKey: "AIzaSyDqf2f82ioqFl4pnPMCG-Ziw5r6QV3e8Lc",
+      authDomain: "chat-b30d5.firebaseapp.com",
+      databaseURL: "https://chat-b30d5.firebaseio.com",
+      storageBucket: "chat-b30d5.appspot.com",
+      messagingSenderId: "914157422945"
+    };
+    firebase.initializeApp(config);
+  </script>
 
     <link rel='stylesheet prefetch' href='http://cdn.materialdesignicons.com/1.1.70/css/materialdesignicons.min.css'>
     <link rel='stylesheet prefetch' href='http://fonts.googleapis.com/css?family=Roboto:300'>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="js/login/login.css">
   </head>
 
   <body ng-app="bootstrap">
@@ -26,6 +38,10 @@
   <script src='js/auth/auth.js'></script>
   <script src='js/auth/session.js'></script>
   <script src='js/auth/authEvents.js'></script>
+  <script src='js/chat/image.js'></script> 
+
+  <script src='js/signup/signin.module.js'></script>
+  <script src='js/signup/signin.component.js'></script>
 
   <script src='js/login/login.module.js'></script>
   <script src='js/login/login.component.js'></script>
@@ -36,6 +52,5 @@
   <script src='js/app.js'></script>
   <script src='js/app.config.js'></script>
 
-  <!--<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>-->
   </body>
 </html>
